@@ -21,7 +21,8 @@ router.get('/', function(req, res, next) {
 
 //insert
 router.post('/',function(req,res){
-    var restaurant = {'restaurant_name':req.body.restaurant_name,
+    var restaurant = {
+    			'restaurant_name':req.body.restaurant_name,
                 'restaurant_opening_time':req.body.restaurant_opening_time,
                 'restaurant_closing_time':req.body.restaurant_closing_time,
                 'restaurant_type':req.body.restaurant_type,

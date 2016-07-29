@@ -1,54 +1,89 @@
-<!DOCTYPE html>
-<head>
-
-<meta charset="utf-8"/>
-   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-   <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css"/>
-   <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
-   <script src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script> 
-</head>
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0
+ Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="ko">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta http-equiv="Content-Style-Type" content="text/css" />
+		<meta http-equiv="Content-Script-Type" content="text/javascript" />
+		<link rel='stylesheet' href='/stylesheets/Ow_Rg_01.css' />
+		<title>Oshow</title>
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript">
+	// 탭.
+	function init_tabs() {
+		$(".tab_content").css("display","none");
+		if (!$('ul.tabs').length) { return; }
+		$('div.tab_content_wrap').each(function() {
+			$(this).find('div.tab_content:first').show();
+		});
+		$('ul.tabs a').click(function() {
+			if (!$(this).hasClass('current')) {
+				$(this).addClass('current').parent('li').siblings('li').find('a.current').removeClass('current');
+				$($(this).attr('href')).show("1000").siblings('div.tab_content').hide("1000");
+			}
+			this.blur();
+			return false;
+		});
+	}
+	$(document).ready(function() {
+		init_tabs();
+	});
+</script>
+	</head>
 <body>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<div data-role="collapsible-set" data-theme="b" data-content-theme="b">
-		<div data-role = "collapsible">
-			
-			<h3>레스토랑 정보</h3>
-			<form name="restaurant" method="post" action="/Ow_Rg_01_Success">
-			 상호명 : <input type="text" name="restaurant_name" ><br/>
-				오픈시간 : <input type="text" name="restaurant_opening_time" ><br/>
-				마감시간 : <input type="text" name="restaurant_closing_time" ><br/>
-				휴무일 : <input type="text" name="holiday_date" ><br/>
-				업종 : <input type="text" name="restaurant_type" ><br/>
-				주소 : <input type="text" name="restaurant_address" ><br/>
-				전화번호 : <input type="text" name="restaurant_tel" ><br/>
-				소개 : <input type="text" name="return" ><br/>
-				대표사진 :<input type="file" name="return"><br/>
+<!-- 탭시작 -->
+<div class="tab-wrap">
+	<ul class="tabs">
+		<li>
+			<a href="#R_INFO" class="selected">레스토랑 정보</a>
+		</li>
+		<li>
+			<a href="#R_MENU">메뉴/예약금 관리</a>
+		</li>
+		<li>
+			<a href="#R_TABLE">매장 도면 및 테이블 배치 구성</a>
+		</li>
+		
+	</ul>
+	<div class="tab_content_wrap">
+		<div id="R_INFO" class="tab_content">
+				<form name="restaurant" method="post" action="/Ow_Rg_01_Success">
+				<center>
+				상호명 *<br> &nbsp; <input type="text" name="restaurant_name" ><br/>
+				오픈시간 *<br> &nbsp; <input type="text" name="restaurant_opening_time" ><br/>
+				마감시간 *<br> &nbsp; <input type="text" name="restaurant_closing_time" ><br/>
+				휴무일 *<br> &nbsp; <input type="text" name="holiday_date" ><br/>
+				업종 *<br> &nbsp; <input type="text" name="restaurant_type" ><br/>
+				주소 *<br> &nbsp; <input type="text" name="restaurant_address" ><br/>
+				전화번호 *<br> &nbsp; <input type="text" name="restaurant_tel" ><br/>
+				소개 *<br> &nbsp; <input type="text" name="return" ><br/>
+				대표사진 *<br> &nbsp;<input type="file" name="return"><br/><br/>
 				
 				<button type="submit">저장</button>
-				<button type="reset" name="return" >취소</button><br/>
+				<button type="reset" name="return" >취소</button><br/><br/>
+				</center>
 				</form>
 		</div>
-		<div data-role = "collapsible">
-			<h3>메뉴등록</h3>
-			<b> 메뉴판 등록 </b> : 
-				<input type="file" name="return" id="name"><br/>
-			<b>Deposit 규정등록 :</b><br/>
-			총 주문가격의 <input type=text" name="return id="deposit">%<br/>
-			고객이 메뉴 선택하지 않을 시 인원수 x <input type=text" name="return id="deposit">원<br/>
+		<div id="R_MENU" class="tab_content">
+		<center>
+			메뉴판 등록  *<br> &nbsp; 
+			<input type="file" name="return" id="name"><br/><br/>
+			Deposit 규정등록 *<br> &nbsp;
+			▶ 총 주문가격의 <input type=text" name="return id="deposit"> %<br/><br/>
+			▶ 고객이 메뉴 선택하지 않을 시 인원수 x <input type=text" name="return id="deposit">원<br/><br/>
 			<button type="submit">저장</button>
-				<button type="reset" name="return" >취소</button><br/>
+				<button type="reset" name="return" >취소</button><br/><br/>
+		</center>
+		</div>
+		<div id="R_TABLE" class="tab_content">
+			<center>
+			테이블 구성
+			</center>
 		</div>
 		
-		<div data-role = "collapsible">
-			<h3>파일</h3>
-			<form action="/photo" method="post" enctype="multipart/form-data">
-			<b> 사진 등록 </b> : 
-					<input type="file" name="userPhoto" multiple><br/>
-			<input type="submit" value="upload">
-			<button type="reset" name="return" >취소</button><br/>
-		</form>
-		</div>
-	</div>		
+	</div><!-- //tab_content_wrap -->
+</div><!-- //tab-wrap -->
+<!-- // 탭끝 -->
 </body>
+
 </html>
