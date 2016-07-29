@@ -5,20 +5,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var mysql = require('mysql');
-
-
-var connection = mysql.createConnection({
-	host : '14.63.196.48' ,
-	port : '3306',
-	user : 'root',
-	password : 'Rkakdqpfm!00',
-	database : 'oshow'
-});
-
 var routes = require('./routes/index');
 var users = require('./routes/users');
-var Ow_Rg_01 = require('./routes/Ow_Rg_01');
+
 
 var app = express();
 
@@ -30,40 +19,18 @@ app.set('view engine', 'ejs');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
+
+var Ow_Rg_01 = require('./routes/Ow_Rg_01');
 app.use('/Ow_Rg_01', Ow_Rg_01);
 
-
-
-//insert
-app.post('/Ow_Rg_01',function(req,res){
-    var restaurant = {'restaurant_name':req.body.restaurant_name,
-                'restaurant_opening_time':req.body.restaurant_opening_time,
-                'restaurant_closing_time':req.body.restaurant_closing_time,
-                'restaurant_type':req.body.restaurant_type,
-                'restaurant_address':req.body.restaurant_address,
-                'restaurant_tel':req.body.restaurant_tel
-                };
-    var query = connection.query('insert into restaurant set ?',restaurant,function(err,result){
-        if (err) {
-            console.error(err);
-            throw err;
-        }
-        console.log(query);
-        res.send(200,'success');
-    });
-});
-
-//select all
-app.get('/Ow_Rg_01', function(req,res){
-        console.log('good');
-});
-
+var Ow_Rg_01_Success = require('./routes/Ow_Rg_01_Success');
+app.use('/Ow_Rg_01_Success', Ow_Rg_01_Success);
 
 //file upload
 
