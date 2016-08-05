@@ -3,7 +3,6 @@ var router = express.Router();
 
 var mysql = require('mysql');
 
-
 var connection = mysql.createConnection({
 	host : '14.63.196.48' ,
 	port : '3306',
