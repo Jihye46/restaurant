@@ -29,9 +29,6 @@ app.use('/users', users);
 var Ow_Rg_01 = require('./routes/Ow_Rg_01');
 app.use('/Ow_Rg_01', Ow_Rg_01);
 
-var Ow_Rg_01_Success = require('./routes/Ow_Rg_01_Success');
-app.use('/Ow_Rg_01_Success', Ow_Rg_01_Success);
-
 //file upload
 
 
