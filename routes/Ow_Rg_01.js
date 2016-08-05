@@ -44,6 +44,27 @@ router.post('/', function(req,res){
 	
 });
 
-
+router.post('/menu', function(req,res){
+	var menu = {
+			'restaurant_no':1,
+			'menu_name':req.body.menu,
+            'price':req.body.price
+            };
+	var query = connection.query('insert into menu set ?',menu,function(err,result){
+    if (err) {
+        console.error(err);
+        throw err;
+    }
+    else {
+    	res.redirect('/Ow_Rg_01');
+   	   //res.send("<script>alert('저장되었습니다.');</script>");
+    	
+    }
+    
+     console.log(query);
+   
+});
+	
+});
 
 module.exports = router;

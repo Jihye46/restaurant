@@ -97,6 +97,19 @@
         var returnValue = alert("저장되었습니다");
 
     }
+    
+    function onWriteSubmitmenu(tag)
+    {
+     if ( $("#menu").val().trim() == "" )
+        {
+            var message = "메뉴를 입력해 주세요";
+            $("#menu").val("");
+            $("#menu").focus();
+            alert(message);
+  			return false;
+        }
+        var returnValue = alert("저장되었습니다");
+       }
 </script>
 <script>
 // this is the id of the form
@@ -163,8 +176,11 @@ $("#registration").submit(function(e) {
 			
 		</div>
 		<div id="R_MENU" class="tab_content">
+		<form method="POST" action="/Ow_Rg_01/menu" name="menu_info" id="menu_info" onsubmit="return onWriteSubmitmenu(this);">
 		<center>
 			메뉴판 등록  *<br> &nbsp; 
+				메뉴 *<br> &nbsp; <input type="text" name="menu" id="menu" ><br/>
+				가격 *<br> &nbsp; <input type="text" name="price" id="price" ><br/>
 			<input type="file" name="return" id="name"><br/><br/>
 			Deposit 규정등록 *<br> &nbsp;
 			▶ 총 주문가격의 <input type=text" name="return id="deposit"> %<br/><br/>
