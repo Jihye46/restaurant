@@ -2,12 +2,13 @@
  Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="ko">
 	<head>
+		 <title><%= title %></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<meta http-equiv="Content-Style-Type" content="text/css" />
 		<meta http-equiv="Content-Script-Type" content="text/javascript" />
 		<link rel='stylesheet' href='/stylesheets/Ow_Rg_01.css' />
 		
-		<title>Oshow</title>
+	
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
 <script type="text/javascript">
 
@@ -137,6 +138,13 @@ $("#registration").submit(function(e) {
 	alert(message);
 	
 	}
+	
+	function addMenu()
+	{
+	var message = "초기화 합니다.";
+	alert(message);
+	
+	}
 </script>
 	</head>
 <body>
@@ -160,13 +168,13 @@ $("#registration").submit(function(e) {
 		<div id="R_INFO" class="tab_content">
 				<form method="POST" action="/Ow_Rg_01" name="r_info" id="registration" onsubmit="return onWriteSubmit(this);">
 				<center>
-				상호명 *<br> &nbsp; <input type="text" name="restaurant_name" id="restaurant_name"><br/>
-				오픈시간 *<br> &nbsp; <input type="text" name="restaurant_opening_time" id="restaurant_opening_time" ><br/>
-				마감시간 *<br> &nbsp; <input type="text" name="restaurant_closing_time"id="restaurant_closing_time"  ><br/>
+				상호명 *<br> &nbsp; <input type="text" name="restaurant_name" id="restaurant_name" value="<%=row.restaurant_name%>"><br/>
+				오픈시간 *<br> &nbsp; <input type="text" name="restaurant_opening_time" id="restaurant_opening_time"value="<%=row.restaurant_opening_time%>" ><br/>
+				마감시간 *<br> &nbsp; <input type="text" name="restaurant_closing_time"id="restaurant_closing_time"  value="<%=row.restaurant_closing_time%>"><br/>
 				휴무일 *<br> &nbsp; <input type="text" name="holiday_date" id="holiday_date" ><br/>
-				업종 *<br> &nbsp; <input type="text" name="restaurant_type" id="restaurant_type" ><br/>
-				주소 *<br> &nbsp; <input type="text" name="restaurant_address" id="restaurant_address" ><br/>
-				전화번호 *<br> &nbsp; <input type="text" name="restaurant_tel" id="restaurant_tel" ><br/>
+				업종 *<br> &nbsp; <input type="text" name="restaurant_type" id="restaurant_type" value="<%=row.restaurant_type%>"><br/>
+				주소 *<br> &nbsp; <input type="text" name="restaurant_address" id="restaurant_address"value="<%=row.restaurant_address%>"><br/>
+				전화번호 *<br> &nbsp; <input type="text" name="restaurant_tel" id="restaurant_tel" value="<%=row.restaurant_tel%>"><br/>
 				소개 *<br> &nbsp; <input type="text" name="return"><br/>
 				대표사진 *<br> &nbsp;<input type="file" name="return" ><br/><br/>
 				<button type="submit" alert="저장되었습니다.">저장</button>
@@ -179,8 +187,9 @@ $("#registration").submit(function(e) {
 		<form method="POST" action="/Ow_Rg_01/menu" name="menu_info" id="menu_info" onsubmit="return onWriteSubmitmenu(this);">
 		<center>
 			메뉴판 등록  *<br> &nbsp; 
-				메뉴 *<br> &nbsp; <input type="text" name="menu" id="menu" ><br/>
-				가격 *<br> &nbsp; <input type="text" name="price" id="price" ><br/>
+				메뉴 *&nbsp; <input type="text" name="menu" id="menu" value="<%=row_menu.menu_name%>">
+				가격 *&nbsp; <input type="text" name="price" id="price" value="<%=row_menu.price%>"><br/>
+				<button type="button" name="add_menu" onClick="addMenu()">메뉴추가</button><br/>
 			<input type="file" name="return" id="name"><br/><br/>
 			Deposit 규정등록 *<br> &nbsp;
 			▶ 총 주문가격의 <input type=text" name="return id="deposit"> %<br/><br/>
