@@ -95,7 +95,7 @@
             alert(message);
   			return false;
         }
-        var returnValue = alert("저장되었습니다");
+        var returnValue = alert("저장되었습니다.");
 
     }
     
@@ -109,7 +109,7 @@
             alert(message);
   			return false;
         }
-        var returnValue = alert("저장되었습니다");
+        var returnValue = alert("메뉴가 저장되었습니다!");
        }
 </script>
 <script>
@@ -181,8 +181,9 @@ $("#registration").submit(function(e) {
 				<button type="reset" onClick="resetForm()" name="reset" >취소</button><br/><br/>
 				</center>
 				</form>
-			
 		</div>
+		
+		<!-- 메뉴 -->
 		<div id="R_MENU" class="tab_content">
 		<form method="POST" action="/Ow_Rg_01/menu" name="menu_info" id="menu_info" onsubmit="return onWriteSubmitmenu(this);">
 		<center>
@@ -197,11 +198,17 @@ $("#registration").submit(function(e) {
 			<button type="submit">저장</button>
 				<button type="reset" name="return" >취소</button><br/><br/>
 		</center>
+		</form>
 		</div>
+		
 		<div id="R_TABLE" class="tab_content">
+			<form method="POST" action="/Ow_Rg_01/file" name="fileupload" id="fileupload">
 			<center>
+			
 			<input type="file" name="fileupload" value="파일"/></br>
+			<button type="submit">이미지 저장</button>
 			</center>
+			</form>
 		</div>
 		
 	</div><!-- //tab_content_wrap -->

@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var mysql = require('mysql');
-
+var multer = require('multer');
 var connection = mysql.createConnection({
 	host : '14.63.196.48' ,
 	port : '3306',
@@ -10,9 +10,56 @@ var connection = mysql.createConnection({
 	password : 'Rkakdqpfm!00',
 	database : 'oshow'
 });
+/* 메뉴 등록 */
+var menu_storage = multer.diskStorage({
+	destination : function(req,file,cb){
+		cb(null,'./pulic/images/menu');
+	},
+	filename : function(req,file,cb){
+		console.log("파일로그" + req);
+		console.log(file);
+		var tmp = file.mimetype; // 'image/jpeg', 'image/png'
+		tmp = tmp.split('/')[1];
+		if(tmp =='jpeg'){
+			tmp='jpg';
+		}
+		var ext = "."+tmp;
+		var idx = file.originalname.lastIndexOf('.');
+		var prefixName = file.originalname.substring(0,idx);
+		cb(null , prefixName + '_' + Date.now() + ext);
+		}
+});
+var menu_upload = multer(
+	{storage : menu_storage}).single('image');
 
 
 
+
+router.get('/',function(req,res,next)
+		{	
+			
+			// 앞으로 datas에는  owner가 레스토랑 등록했을 때 부여 된 restaurant_no값 들어가야 함  
+			var datas = '1';
+			var query = connection.query('select restaurant_name,restaurant_opening_time,restaurant_closing_time,restaurant_type,restaurant_address,restaurant_tel from restaurant where restaurant_no=?' ,datas, function(err,row){
+				var menu_query = connection.query('select menu_name,price from menu where restaurant_no=?' , datas, function(err_menu,row_menu){
+				//레스토랑 정보 입력한 적이 없는 owner인 경우
+				//row가 null이면 메뉴도 등록이 될 수 없으므로 null
+				if(row =='')
+					{
+					 res.render('Ow_Rg_01', {title:"OSHOW 레스토랑 정보등록", row:"", row_menu:""});
+					}
+			    else {
+			    	console.log("레스토랑 정보 조회 결과 확인 : ",row);
+			    	console.log("메뉴 정보 조회 결과 확인 : ",row_menu);
+		            res.render('Ow_Rg_01', {title:"OSHOW 레스토랑 정보등록", row:row[0], row_menu:row_menu[0]});
+			    	
+			    }
+			    
+			     console.log(query);
+			     console.log(menu_query);
+			});
+		});	
+	});
 
 router.post('/', function(req,res){
 	var restaurant = {
@@ -60,37 +107,19 @@ router.post('/menu', function(req,res){
     
      console.log(query);
    
-});
-	
-});
-
-
-router.get('/',function(req,res,next)
-		{	
-			
-			// 앞으로 datas에는  owner가 레스토랑 등록했을 때 부여 된 restaurant_no값 들어가야 함  
-			var datas = '1';
-			var query = connection.query('select restaurant_name,restaurant_opening_time,restaurant_closing_time,restaurant_type,restaurant_address,restaurant_tel from restaurant where restaurant_no=?' ,datas, function(err,row){
-				var menu_query = connection.query('select menu_name,price from menu where restaurant_no=?' , datas, function(err_menu,row_menu){
-				//레스토랑 정보 입력한 적이 없는 owner인 경우
-				//row가 null이면 메뉴도 등록이 될 수 없으므로 null
-				if(row =='')
-					{
-					 res.render('Ow_Rg_01', {title:"OSHOW 레스토랑 정보등록", row:"", row_menu:""});
-					}
-			    else {
-			    	console.log("레스토랑 정보 조회 결과 확인 : ",row);
-			    	console.log("메뉴 정보 조회 결과 확인 : ",row_menu);
-		            res.render('Ow_Rg_01', {title:"OSHOW 레스토랑 정보등록", row:row[0], row_menu:row_menu[0]});
-			    	
-			    }
-			    
-			     console.log(query);
-			     console.log(menu_query);
-			});
-		});	
 	});
-		    
+});
+
+
+router.post('/file',  function(req,res, next){
+	menu_upload(req, res, function(err){
+		if(err){
+			return res.end("Error uploading file.");
+		}
+		
+		res.redirect('/Ow_Rg_01');
+	});
+});
 	
 
 module.exports = router;
