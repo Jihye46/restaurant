@@ -10,30 +10,6 @@ var connection = mysql.createConnection({
 	password : 'Rkakdqpfm!00',
 	database : 'oshow'
 });
-/* 메뉴 등록 */
-var menu_storage = multer.diskStorage({
-	destination : function(req,file,cb){
-		cb(null,'./pulic/images/menu');
-	},
-	filename : function(req,file,cb){
-		console.log("파일로그" + req);
-		console.log(file);
-		var tmp = file.mimetype; // 'image/jpeg', 'image/png'
-		tmp = tmp.split('/')[1];
-		if(tmp =='jpeg'){
-			tmp='jpg';
-		}
-		var ext = "."+tmp;
-		var idx = file.originalname.lastIndexOf('.');
-		var prefixName = file.originalname.substring(0,idx);
-		cb(null , prefixName + '_' + Date.now() + ext);
-		}
-});
-var menu_upload = multer(
-	{storage : menu_storage}).single('image');
-
-
-
 
 router.get('/',function(req,res,next)
 		{	
@@ -42,16 +18,17 @@ router.get('/',function(req,res,next)
 			var datas = '1';
 			var query = connection.query('select restaurant_name,restaurant_opening_time,restaurant_closing_time,restaurant_type,restaurant_address,restaurant_tel from restaurant where restaurant_no=?' ,datas, function(err,row){
 				var menu_query = connection.query('select menu_name,price from menu where restaurant_no=?' , datas, function(err_menu,row_menu){
-				//레스토랑 정보 입력한 적이 없는 owner인 경우
-				//row가 null이면 메뉴도 등록이 될 수 없으므로 null
-				if(row =='')
+				/* 레스토랑 정보 입력한 적이 없는 owner인 경우
+				row가 null이면 메뉴도 등록이 될 수 없으므로 null */
+				if(row == '')
 					{
 					 res.render('Ow_Rg_01', {title:"OSHOW 레스토랑 정보등록", row:"", row_menu:""});
 					}
 			    else {
-			    	console.log("레스토랑 정보 조회 결과 확인 : ",row);
-			    	console.log("메뉴 정보 조회 결과 확인 : ",row_menu);
-		            res.render('Ow_Rg_01', {title:"OSHOW 레스토랑 정보등록", row:row[0], row_menu:row_menu[0]});
+			    	console.log("레스토랑 정보 조회 결과 확인 : ", row);
+			    	console.log("메뉴 정보 조회 결과 확인 : ", row_menu);
+			    	//row_menu의 경우 여러개 인 경우 for문으로 출력해주기 !수정
+		            res.render('Ow_Rg_01', {title:"OSHOW 레스토랑 정보등록", row:row[0], row_menu:row_menu[datas]});
 			    	
 			    }
 			    
@@ -110,15 +87,38 @@ router.post('/menu', function(req,res){
 	});
 });
 
+/* 메뉴 등록 */
+//메뉴 이름 뒤에 레스토랑 이름붙이거나 다른 레스토랑과 구별할 수 있도록 해야 함
+var upload = multer({ 
+	dest: '../public/images/menus/'});
+var type = upload.single('image');
 
-router.post('/file',  function(req,res, next){
-	menu_upload(req, res, function(err){
-		if(err){
-			return res.end("Error uploading file.");
-		}
-		
-		res.redirect('/Ow_Rg_01');
-	});
+var fs = require('fs');
+
+/** Permissible loading a single file, 
+    the value of the attribute "name" in the form of "recfile". **/
+
+router.post('/file', type, function (req,res) {
+
+  /** When using the "single"
+      data come in "req.file" regardless of the attribute "name". **/
+  //var tmp_path = req.file.path;
+
+  /** The original name of the uploaded file
+      stored in the variable "originalname". **/
+  var target_path = '../public/images/menu/' + req.file.originalname;
+
+  /** A better way to copy the uploaded file. **/
+ // var src = fs.createReadStream(tmp_path);
+ 
+  var dest = fs.createWriteStream(target_path);
+  console.log('메뉴 이미지 저장 경로 : ' + target_path);
+  //src.pipe(dest);
+  //src.on('end', function() { res.render('complete'); });
+  //src.on('error', function(err) { res.render('error'); });
+
+  res.redirect('/Ow_Rg_01');
+  
 });
 	
 
