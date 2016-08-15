@@ -95,6 +95,23 @@
             alert(message);
   			return false;
         }
+        if ( $("#restaurant_deposit_menu").val().trim() == "" )
+        {
+            var message = "총 메뉴가격에 따른 deposit을 정해주세요  입력해 주세요";
+            $("#restaurant_deposit_menu").val("");
+            $("#restaurant_deposit_menu").focus();
+            alert(message);
+  			return false;
+        }
+        
+        if ( $("#restaurant_deposit_member").val().trim() == "" )
+        {
+            var message = "총 인원에 따른 deposit을 입력해 주세요";
+            $("#restaurant_deposit_member").val("");
+            $("#restaurant_deposit_member").focus();
+            alert(message);
+  			return false;
+        }
         var returnValue = alert("저장되었습니다.");
 
     }
@@ -166,17 +183,21 @@ $("#registration").submit(function(e) {
 	<div class="tab_content_wrap">
 	
 		<div id="R_INFO" class="tab_content">
-				<form method="POST" action="/Ow_Rg_01" name="r_info" id="registration" onsubmit="return onWriteSubmit(this);">
+				<form method="POST" enctype ="multipart/form-data" action="/Ow_Rg_01" name="r_info" id="registration" onsubmit="return onWriteSubmit(this);">
 				<center>
 				상호명 *<br> &nbsp; <input type="text" name="restaurant_name" id="restaurant_name" value="<%=row.restaurant_name%>"><br/>
-				오픈시간 *<br> &nbsp; <input type="text" name="restaurant_opening_time" id="restaurant_opening_time"value="<%=row.restaurant_opening_time%>" ><br/>
-				마감시간 *<br> &nbsp; <input type="text" name="restaurant_closing_time"id="restaurant_closing_time"  value="<%=row.restaurant_closing_time%>"><br/>
-				휴무일 *<br> &nbsp; <input type="text" name="holiday_date" id="holiday_date" ><br/>
+				오픈시간 *<br> &nbsp; <input type="text" name="restaurant_opening_time" id="restaurant_opening_time"value="<%=row.restaurant_opening_time%>" placeholder ="ex)10:00:00"><br/>
+				마감시간 *<br> &nbsp; <input type="text" name="restaurant_closing_time"id="restaurant_closing_time"  value="<%=row.restaurant_closing_time%>" placeholder ="ex)21:00:00"><br/>
+				휴무일 *<br> &nbsp; <input type="text" name="holiday_date" id="holiday_date" value="<%=row_holiday.holiday_date%>" placeholder="ex)2016-04-02"><br/>
 				업종 *<br> &nbsp; <input type="text" name="restaurant_type" id="restaurant_type" value="<%=row.restaurant_type%>"><br/>
 				주소 *<br> &nbsp; <input type="text" name="restaurant_address" id="restaurant_address"value="<%=row.restaurant_address%>"><br/>
 				전화번호 *<br> &nbsp; <input type="text" name="restaurant_tel" id="restaurant_tel" value="<%=row.restaurant_tel%>"><br/>
-				소개 *<br> &nbsp; <input type="text" name="return"><br/>
-				대표사진 *<br> &nbsp;<input type="file" name="return" ><br/><br/>
+				소개 *<br> &nbsp; <input type="text" name="restaurant_introduce" size=50 value="<%=row.restaurant_introduce%>"><br/><br/>
+				Deposit 규정등록 *<br> &nbsp;
+			▶ 총 주문가격의 <input type=text" name="restaurant_deposit_menu" id="restaurant_deposit_menu" value="<%=row.restaurant_deposit_menu%>"> %<br/><br/>
+			▶ 고객이 메뉴 선택하지 않을 시 인원수 x <input type=text" name="restaurant_deposit_member"   id="restaurant_deposit_member" value="<%=row.restaurant_deposit_member%>">원<br/><br/>
+				대표사진 *<br> &nbsp;<input type="file" name="image" value="<%=row.restaurant_picture_url%>"><br/><br/>
+				
 				<button type="submit" alert="저장되었습니다.">저장</button>
 				<button type="reset" onClick="resetForm()" name="reset" >취소</button><br/><br/>
 				</center>
@@ -187,14 +208,11 @@ $("#registration").submit(function(e) {
 		<div id="R_MENU" class="tab_content">
 		<form method="POST" action="/Ow_Rg_01/menu" name="menu_info" id="menu_info" onsubmit="return onWriteSubmitmenu(this);">
 		<center>
-			메뉴판 등록  *<br> &nbsp; 
-				메뉴 *&nbsp; <input type="text" name="menu" id="menu" value="<%=row_menu.menu_name%>">
-				가격 *&nbsp; <input type="text" name="price" id="price" value="<%=row_menu.price%>"><br/>
-				<button type="button" name="add_menu" onClick="addMenu()">메뉴추가</button><br/>
-			<input type="file" name="return" id="name"><br/><br/>
-			Deposit 규정등록 *<br> &nbsp;
-			▶ 총 주문가격의 <input type=text" name="return id="deposit"> %<br/><br/>
-			▶ 고객이 메뉴 선택하지 않을 시 인원수 x <input type=text" name="return id="deposit">원<br/><br/>
+				메뉴판 등록  *<br> &nbsp; 
+				<input type="file" name="menu_picture" id="menu_picture"/><br/><br/>
+				<button type="button" name="add_menu" onClick="addMenu()">메뉴추가</button><br/><br/>
+			
+			
 			<button type="submit">저장</button>
 				<button type="reset" name="return" >취소</button><br/><br/>
 		</center>
