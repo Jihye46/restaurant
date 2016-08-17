@@ -89,7 +89,8 @@ router.post('/', type, function(req,res){
     else {
     				res.redirect('/Ow_Rg_01');
     		}
-    		    	
+    		
+    
 	});
     
      console.log(query);
