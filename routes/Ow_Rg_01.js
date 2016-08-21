@@ -9,7 +9,7 @@ var connection = mysql.createConnection({
 	user : 'root',
 	password : 'Rkakdqpfm!00',
 	database : 'oshow',
-	multipleStatements : true
+	multipleStatements : true //프로시저 사용하기 위해 필요한 옵션
 });
 
 /* 메뉴 등록 */
@@ -23,7 +23,9 @@ router.get('/',function(req,res,next)
 		{	
 			
 			// 앞으로 datas에는  owner가 레스토랑 등록했을 때 부여 된 restaurant_no값 들어가야 함  
-			var datas = '45';
+			// owner_id에 restaurant_no 컬럼이 null 이면 아무것도 안보여짐
+			// null 아닌 경우 해당 restaurant_no에 대한 정보 보여지도록
+			var datas = '45'; //여기에 owner select restaurant_no from owner where owner_id=
 			var query = connection.query('select restaurant_name,restaurant_opening_time,restaurant_closing_time,restaurant_type,restaurant_address,restaurant_tel,restaurant_picture_url,restaurant_deposit_member,restaurant_deposit_menu,restaurant_introduce from restaurant where restaurant_no=?' , datas, function(err,row){
 				var menu_query = connection.query('select menu_name,price from menu where restaurant_no=?' , '1', function(err_menu,row_menu){
 					var holiday_query = connection.query('select holiday_date from holiday where restaurant_no=?' , datas, function(err_holiday,row_holiday){
@@ -56,8 +58,8 @@ router.post('/', type, function(req,res){
 	/* 메뉴 이미지*/
 	 /** The original name of the uploaded file
     stored in the variable "originalname". **/
-	var target_path = '../public/images/menu/' + req.file.originalname;
 	var tmp_path = req.file.path;
+	var target_path = '../public/images/menu/' + req.file.originalname;
 	/** A better way to copy the uploaded file. **/
 	 var src = fs.createReadStream(tmp_path);
 
@@ -66,7 +68,7 @@ router.post('/', type, function(req,res){
 	src.pipe(dest);
 	
 	/*입력 값 DB저장 */
-	var restaurant = {
+	var r = {
 			'restaurant_name':req.body.restaurant_name,
 	        'restaurant_opening_time':req.body.restaurant_opening_time,
 	        'restaurant_closing_time':req.body.restaurant_closing_time,
@@ -81,7 +83,10 @@ router.post('/', type, function(req,res){
 	        };
 
 	
-	var query = connection.query('CALL ps_SetRestaurantInfo (?, ?, ?)', [restaurant.restaurant_name,restaurant.restaurant_address, restaurant.holiday_date ], function(err,result){
+	var query = connection.query('CALL ps_SetRestaurantInfo (?, ?, ?, ? ,?, ?, ?, ?, ?, ?, ?)', [r.restaurant_name, r.restaurant_opening_time,r.restaurant_closing_time,
+	                                                                     r.restaurant_type, r.restaurant_address, r.restaurant_tel,
+	                                                                     r.restaurant_picture_url,r.restaurant_deposit_member,r.restaurant_deposit_menu,
+	                                                                     r.restaurant_introduce, r.holiday_date ], function(err,result){
     if (err) {
         console.error(err);
         throw err;
